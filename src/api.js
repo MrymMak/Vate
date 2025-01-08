@@ -1,10 +1,16 @@
-import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginSignupPage from "./pages/LoginSignupPage";
+import TemplateLibraryPage from "./components/TemplateLibraryPage"; // Next page
 
-const instance = axios.create({
-    baseURL: 'http://localhost:5000', // Replace with your Vate backend URL
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
+function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<LoginSignupPage />} />
+                <Route path="/template-library" element={<TemplateLibraryPage />} />
+            </Routes>
+        </Router>
+    );
+}
 
-export default instance;
+export default App;

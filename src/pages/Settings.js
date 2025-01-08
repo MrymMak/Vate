@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
 const Settings = () => {
     return (
         <div>
             <h1>Settings</h1>
-            <p>Manage your Vate preferences here.</p>
+            <p>Placeholder for Settings page.</p>
         </div>
     );
 };
