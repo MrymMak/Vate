@@ -7,7 +7,6 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import TechnicalDocs from "./pages/TechnicalDocs";
 import OverviewTopics from "./pages/OverviewTopics";
-import FileUploadPage from "./pages/FileUploadPage";
 
 // Placeholder components for missing pages
 const NotFound = () => <h1>404: Page Not Found</h1>;
@@ -31,7 +30,6 @@ const App = () => {
                 <Route path="/overview-topics" element={<OverviewTopics />} />
 
                 {/* File Upload and VateGPT */}
-                <Route path="/file-upload" element={<FileUploadPage />} />
                 <Route path="/vate-gpt" element={<VateGPTPage />} />
 
                 {/* Fallback Route */}

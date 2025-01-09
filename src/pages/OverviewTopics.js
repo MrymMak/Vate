@@ -202,15 +202,21 @@ const OverviewTopics = () => {
                             <Button
                                 type="primary"
                                 size="large"
-                                onClick={() => navigate("/file-upload")}
                                 disabled={!isUploadEnabled}
+                                onClick={() => {
+                                    if (isUploadEnabled) {
+                                        // Open VateGPT with the template session ID
+                                        const sessionId = Date.now().toString(); // Replace with actual session ID if available
+                                        window.open(`https://chat.openai.com/?session=${sessionId}`, "_blank");
+                                    }
+                                }}
                                 style={{
                                     backgroundColor: isUploadEnabled ? "#305E3C" : "#ccc",
                                     borderColor: isUploadEnabled ? "#305E3C" : "#ccc",
                                     color: isUploadEnabled ? "#fff" : "#000",
                                 }}
                             >
-                                Upload Your File
+                                Continue to VateGPT
                             </Button>
                         </div>
                     </div>
