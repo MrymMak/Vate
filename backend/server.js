@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+
 dotenv.config();
 
 const app = express();
@@ -12,6 +13,28 @@ app.use(express.json());
 
 // Store session data in memory
 let sessionData = {};
+
+// API endpoint to create a session with the selected template
+app.post("/api/session", (req, res) => {
+    try {
+        const { selectedTemplate } = req.body;
+
+        if (!selectedTemplate) {
+            return res.status(400).json({ message: "Template is required." });
+        }
+
+        // Generate a session ID and store the data
+        const sessionId = Date.now().toString(); // Use a timestamp as a unique session ID
+        sessionData[sessionId] = {
+            selectedTemplate,
+        };
+
+        res.json({ sessionId });
+    } catch (error) {
+        console.error("Error creating session:", error.message);
+        res.status(500).json({ message: "Error creating session." });
+    }
+});
 
 // API endpoint to retrieve session template data
 app.get("/api/session/:id", (req, res) => {
@@ -25,28 +48,6 @@ app.get("/api/session/:id", (req, res) => {
     // Respond with the selected template data
     const { selectedTemplate } = sessionData[sessionId];
     res.json({ selectedTemplate });
-});
-
-// API endpoint to create a session with the selected template
-app.post("/api/session", (req, res) => {
-    try {
-        const { selectedTemplate } = req.body;
-
-        if (!selectedTemplate) {
-            return res.status(400).json({ message: "Template is required." });
-        }
-
-        // Generate a session ID and store the data
-        const sessionId = Date.now().toString();
-        sessionData[sessionId] = {
-            selectedTemplate,
-        };
-
-        res.json({ sessionId });
-    } catch (error) {
-        console.error("Error creating session:", error.message);
-        res.status(500).json({ message: "Error creating session." });
-    }
 });
 
 // Start the server
