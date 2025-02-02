@@ -2,6 +2,11 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
+// Import API actions
+const { createSession } = require("./actions/createSession");
+const getSessionById = require("./actions/getSessionById");
+const getAllSessions = require("./actions/getAllSessions");
+
 dotenv.config();
 
 const app = express();
@@ -11,46 +16,17 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
-// Store session data in memory
-let sessionData = {};
+// API routes
+app.post("/api/session", createSession);
+app.get("/api/session/:id", getSessionById);
+app.get("/api/session", getAllSessions);
 
-// API endpoint to create a session with the selected template
-app.post("/api/session", (req, res) => {
-    try {
-        const { selectedTemplate } = req.body;
-
-        if (!selectedTemplate) {
-            return res.status(400).json({ message: "Template is required." });
-        }
-
-        // Generate a session ID and store the data
-        const sessionId = Date.now().toString(); // Use a timestamp as a unique session ID
-        sessionData[sessionId] = {
-            selectedTemplate,
-        };
-
-        res.json({ sessionId });
-    } catch (error) {
-        console.error("Error creating session:", error.message);
-        res.status(500).json({ message: "Error creating session." });
-    }
+// Root route
+app.get("/", (req, res) => {
+    res.send("Vate Backend is Running!");
 });
 
-// API endpoint to retrieve session template data
-app.get("/api/session/:id", (req, res) => {
-    const sessionId = req.params.id;
-
-    // Check if the session ID exists
-    if (!sessionData[sessionId]) {
-        return res.status(404).json({ message: "Session not found" });
-    }
-
-    // Respond with the selected template data
-    const { selectedTemplate } = sessionData[sessionId];
-    res.json({ selectedTemplate });
-});
-
-// Start the server
+// Start server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
