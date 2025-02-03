@@ -10,7 +10,6 @@ import OverviewTopics from "./pages/OverviewTopics";
 
 // Placeholder components for missing pages
 const NotFound = () => <h1>404: Page Not Found</h1>;
-const VateGPTPage = () => <h1>VateGPT Integration Placeholder</h1>;
 
 const App = () => {
     return (
@@ -29,8 +28,6 @@ const App = () => {
                 <Route path="/technical-docs" element={<TechnicalDocs />} />
                 <Route path="/overview-topics" element={<OverviewTopics />} />
 
-                {/* File Upload and VateGPT */}
-                <Route path="/vate-gpt" element={<VateGPTPage />} />
 
                 {/* Fallback Route */}
                 <Route path="*" element={<NotFound />} />

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Layout, Menu, Input, Button, Row, Col, Card, Tag } from "antd";
 import { FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import Axios
 
 const { Sider, Content } = Layout;
 
@@ -29,10 +30,18 @@ const OverviewTopics = () => {
     };
 
     const handleSelectTemplate = () => {
-        if (!selectedTemplates.includes(expandedTemplate)) {
-            setSelectedTemplates([...selectedTemplates, expandedTemplate]);
-            setIsUploadEnabled(true);
+        let updatedTemplates;
+
+        if (selectedTemplates.includes(expandedTemplate)) {
+            // Remove the template
+            updatedTemplates = selectedTemplates.filter((template) => template !== expandedTemplate);
+        } else {
+            // Add the template
+            updatedTemplates = [...selectedTemplates, expandedTemplate];
         }
+
+        setSelectedTemplates(updatedTemplates);
+        setIsUploadEnabled(updatedTemplates.length > 0); // Disable button if no templates are selected
     };
 
     const handleMinimize = () => {
@@ -203,17 +212,33 @@ const OverviewTopics = () => {
                                 type="primary"
                                 size="large"
                                 disabled={!isUploadEnabled}
-                                onClick={() => {
+                                onClick={async () => {
                                     if (isUploadEnabled) {
-                                        // Open VateGPT with the template session ID
-                                        const sessionId = Date.now().toString(); // Replace with actual session ID if available
-                                        window.open(`https://chat.openai.com/?session=${sessionId}`, "_blank");
+                                        try {
+                                            console.log("Sending request to create session...");
+
+                                            const response = await axios.post("https://vate.onrender.com/api/session", {
+                                                selectedTemplate: selectedTemplates[0], // First selected template
+                                            });
+
+                                            console.log("API Response:", response);
+
+                                            if (response.status === 201 || response.status === 200) {  // ✅ Handle both 201 and 200
+                                                const sessionId = response.data.sessionId;
+                                                console.log("Session created successfully:", sessionId);
+
+                                                // ✅ Redirect to VateGPT with session ID
+                                                const vateGPTUrl = `https://chatgpt.com/g/g-67607db379148191bb6a5d90511fe882-vategpt?session=${sessionId}`;
+                                                window.open(vateGPTUrl, "_blank");
+                                            } else {
+                                                console.error("Unexpected response:", response.status);
+                                                alert(`Error: Unexpected response (${response.status}).`);
+                                            }
+                                        } catch (error) {
+                                            console.error("Error in API call:", error.response ? error.response.data : error.message);
+                                            alert("Error: Could not create session. Check console for details.");
+                                        }
                                     }
-                                }}
-                                style={{
-                                    backgroundColor: isUploadEnabled ? "#305E3C" : "#ccc",
-                                    borderColor: isUploadEnabled ? "#305E3C" : "#ccc",
-                                    color: isUploadEnabled ? "#fff" : "#000",
                                 }}
                             >
                                 Continue to VateGPT
@@ -234,20 +259,27 @@ const OverviewTopics = () => {
                             }}
                         >
                             <h3 style={{ color: "#484848" }}>{expandedTemplate}</h3>
-                            <p style={{ color: "#484848" }}>
-                                This is a preview of the selected template.
-                            </p>
+
+                            {/* Iframe to Preview the Template */}
+                            <iframe
+                                title={`Preview of ${expandedTemplate}`}
+                                src={`/templates/tech-docs/overview-topics/${expandedTemplate.replace(/\s+/g, "").toLowerCase()}/index.html`}
+                                width="100%"
+                                height="600px"
+                                style={{ border: "none", marginTop: "10px" }}
+                            ></iframe>
                             <Button
                                 type="primary"
                                 style={{
-                                    marginBottom: "10px",
-                                    backgroundColor: "#305E3C",
-                                    borderColor: "#305E3C",
+                                    marginTop: "10px",
+                                    backgroundColor: selectedTemplates.includes(expandedTemplate) ? "#D9534F" : "#305E3C",
+                                    borderColor: selectedTemplates.includes(expandedTemplate) ? "#D9534F" : "#305E3C",
                                 }}
                                 onClick={handleSelectTemplate}
                             >
-                                Select this template
+                                {selectedTemplates.includes(expandedTemplate) ? "Unselect this template" : "Select this template"}
                             </Button>
+
                             <Button
                                 style={{
                                     position: "absolute",

@@ -2,31 +2,36 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-// Import API actions
-const { createSession } = require("./actions/createSession");
+const createSession = require("./actions/createSession");
 const getSessionById = require("./actions/getSessionById");
 const getAllSessions = require("./actions/getAllSessions");
 
-dotenv.config();
+dotenv.config(); // Load environment variables
 
-const app = express();
+const app = express(); // ✅ Move this above middleware
 const PORT = 5000;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// ✅ CORS options
+const corsOptions = {
+    origin: "*",
+    methods: "GET, POST",
+    allowedHeaders: "Content-Type",
+};
 
-// API routes
+app.use(cors(corsOptions)); // ✅ Now app is defined before use
+app.use(express.json()); // ✅ Allow JSON requests
+
+// ✅ API Routes
 app.post("/api/session", createSession);
 app.get("/api/session/:id", getSessionById);
 app.get("/api/session", getAllSessions);
 
-// Root route
+// ✅ Root route
 app.get("/", (req, res) => {
     res.send("Vate Backend is Running!");
 });
 
-// Start server
+// ✅ Start Server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
