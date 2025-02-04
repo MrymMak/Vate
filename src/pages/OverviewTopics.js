@@ -215,19 +215,23 @@ const OverviewTopics = () => {
                                 onClick={async () => {
                                     if (isUploadEnabled) {
                                         try {
+                                            const API_KEY = process.env.REACT_APP_API_KEY;  // Declare first
+
                                             console.log("Sending request to create session...");
+                                            console.log("Frontend API Key:", API_KEY); // Now API_KEY is defined
 
-                                            const response = await axios.post("https://vate.onrender.com/api/session", {
-                                                selectedTemplate: selectedTemplates[0], // First selected template
-                                            });
-
+                                            const response = await axios.post(
+                                                "https://vate.onrender.com/api/session",
+                                                { selectedTemplate: selectedTemplates[0] },
+                                                { headers: { "x-api-key": API_KEY } }
+                                            );
                                             console.log("API Response:", response);
 
-                                            if (response.status === 201 || response.status === 200) {  // ✅ Handle both 201 and 200
+                                            if (response.status === 201 || response.status === 200) {  // Handle both 201 and 200
                                                 const sessionId = response.data.sessionId;
                                                 console.log("Session created successfully:", sessionId);
 
-                                                // ✅ Redirect to VateGPT with session ID
+                                                //  Redirect to VateGPT with session ID
                                                 const vateGPTUrl = `https://chatgpt.com/g/g-67607db379148191bb6a5d90511fe882-vategpt?session=${sessionId}`;
                                                 window.open(vateGPTUrl, "_blank");
                                             } else {
