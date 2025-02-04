@@ -34,6 +34,9 @@ app.use((req, res, next) => {
         return next(); // Skip API key check in local development
     }
 
+    // Log all request headers for debugging
+    console.log("Request Headers:", req.headers);
+
     const providedKey = req.headers["x-api-key"];
 
     // Log the raw key values using JSON.stringify to reveal whitespace or newlines
