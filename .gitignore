@@ -8,9 +8,6 @@ node_modules/
 backend/uploads/
 backend/temp-storage/
 
-# Build files
-build/
-
 # Environment files
 .env
 .env.local
