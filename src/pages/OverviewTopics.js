@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, Menu, Input, Button, Row, Col, Card, Tag } from "antd";
 import { FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import Axios
+
 
 const { Sider, Content } = Layout;
 
@@ -24,6 +25,23 @@ const OverviewTopics = () => {
         "Template 9",
         "Template 10",
     ];
+
+    const [templateData, setTemplateData] = useState(null);
+
+    useEffect(() => {
+        fetch(`${process.env.PUBLIC_URL}/templates/tech-docs/overview-topics/template.json`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch template");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Loaded Template:", data);
+                setTemplateData(data); // Update state with template data
+            })
+            .catch(error => console.error("Error loading template:", error));
+    }, []);
 
     const handleExpand = (template) => {
         setExpandedTemplate(template);
@@ -47,6 +65,7 @@ const OverviewTopics = () => {
     const handleMinimize = () => {
         setExpandedTemplate(null);
     };
+
 
     return (
         <Layout style={{ minHeight: "100vh", fontFamily: "Poppins, sans-serif" }}>
@@ -267,7 +286,7 @@ const OverviewTopics = () => {
                             {/* Iframe to Preview the Template */}
                             <iframe
                                 title={`Preview of ${expandedTemplate}`}
-                                src={`/templates/tech-docs/overview-topics/${expandedTemplate.replace(/\s+/g, "").toLowerCase()}/index.html`}
+                                src={`${process.env.PUBLIC_URL}/templates/tech-docs/overview-topics/${expandedTemplate.replace(/\s+/g, "").toLowerCase()}/index.html`}
                                 width="100%"
                                 height="600px"
                                 style={{ border: "none", marginTop: "10px" }}
