@@ -2,7 +2,7 @@
     "name": "vate-main",
     "version": "1.0.0",
     "private": true,
-    "homepage": "https://mrymmak.github.io/Vate",
+    "homepage": "/",
     "dependencies": {
         "@rollup/plugin-terser": "^0.4.4",
         "ajv": "^6.12.6",

@@ -27,18 +27,6 @@ const OverviewTopics = () => {
         "Template 10",
     ];
 
-    const [templateData, setTemplateData] = useState(null);
-
-    useEffect(() => {
-        fetch(`${process.env.PUBLIC_URL}/templates/tech-docs/overview-topics/template.json`)
-            .then(response => response.json())
-            .then(data => {
-                console.log("Loaded Template:", data);
-                setTemplateData(data); // eslint-disable-line no-unused-vars
-            })
-            .catch(error => console.error("Error loading template:", error));
-    }, []);
-
     const handleExpand = (template) => {
         setExpandedTemplate(template);
     };
@@ -65,7 +53,6 @@ const OverviewTopics = () => {
 
     return (
         <>
-            {templateData && <pre>{JSON.stringify(templateData, null, 2)}</pre>}
             <Layout style={{ minHeight: "100vh", fontFamily: "Poppins, sans-serif" }}>
                 {/* Sidebar */}
                 <Sider style={{ backgroundColor: "#305E3C", color: "#fff" }}>
@@ -283,7 +270,7 @@ const OverviewTopics = () => {
                                 {/* Iframe to Preview the Template */}
                                 <iframe
                                     title={`Preview of ${expandedTemplate}`}
-                                    src={`${process.env.PUBLIC_URL}/templates/tech-docs/overview-topics/${expandedTemplate.replace(/\s+/g, "").toLowerCase()}/index.html`}
+                                    src={`templates/tech-docs/overview-topics/${expandedTemplate.replace(/\s+/g, "").toLowerCase()}/index.html`}
                                     width="100%"
                                     height="600px"
                                     style={{ border: "none", marginTop: "10px" }}
