@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const fetch = require("node-fetch");
@@ -10,7 +11,7 @@ const getAllSessions = require("./actions/getAllSessions");
 dotenv.config(); // Load environment variables
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Load API Keys
 const API_KEY = process.env.API_KEY || process.env.RENDER_API_KEY;
@@ -18,7 +19,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 // CORS options
 const corsOptions = {
-    origin: "*", // Allow all origins temporarily
+    origin: "*",
     methods: "GET, POST",
     allowedHeaders: "Content-Type, x-api-key",
 };
@@ -27,28 +28,31 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Middleware to Check API Key (Only on Production)
-const isLocal = process.env.NODE_ENV !== "production"; // Check if running locally
+const isLocal = process.env.NODE_ENV !== "production";
 
 app.use((req, res, next) => {
     if (isLocal) {
         return next(); // Skip API key check in local development
     }
 
-    // Log all request headers for debugging
-    console.log("Request Headers:", req.headers);
-
     const providedKey = req.headers["x-api-key"];
-
-    // Log the raw key values using JSON.stringify to reveal whitespace or newlines
-    console.log("Received API Key (raw):", JSON.stringify(providedKey), "Length:", providedKey ? providedKey.length : 0);
-    console.log("Expected API Key (raw):", JSON.stringify(API_KEY), "Length:", API_KEY ? API_KEY.length : 0);
-
-    // Compare trimmed keys to eliminate accidental whitespace issues
-    if (!providedKey || providedKey.trim() !== API_KEY.trim()) {
-        console.log("API Key Mismatch! Access Denied.");
+    if (!providedKey || providedKey.trim() !== API_KEY?.trim()) {
         return res.status(403).json({ message: "Forbidden: Invalid API Key" });
     }
     next();
+});
+
+const buildPath = path.join(__dirname, "../build");
+
+// Serve React static files
+app.use(express.static(buildPath));
+
+// 🚀 Ensure templates are explicitly served
+app.use("/templates", express.static(path.join(__dirname, "../build/templates")));
+
+// Handle React Router fallback
+app.get("*", (req, res) => {
+    res.sendFile(path.join(buildPath, "index.html"));
 });
 
 // API Routes
@@ -60,12 +64,11 @@ app.get("/api/session", getAllSessions);
 app.get("/proxy/session/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(`Fetching session data for ID: ${id}`);
 
         const response = await fetch(`https://vate.onrender.com/api/session/${id}`, {
             headers: {
                 "x-api-key": API_KEY,
-                "Authorization": `Bearer ${OPENAI_API_KEY}`
+                "Authorization": `Bearer ${OPENAI_API_KEY}`,
             },
         });
 
@@ -74,10 +77,8 @@ app.get("/proxy/session/:id", async (req, res) => {
         }
 
         const data = await response.json();
-        console.log("Session Data Retrieved:", data);
         return res.json(data);
     } catch (error) {
-        console.error("Error in proxy session retrieval:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 });
