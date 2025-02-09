@@ -30,4 +30,3 @@ jobs:
           github_token: ${{ secrets.GH_PAGES_DEPLOY_TOKEN }}  # Add this line
           publish_dir: ./build
           publish_branch: gh-pages
-          force_orphan: true # This forces a new commit every time
