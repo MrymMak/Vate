@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Vate/static/css/main.7ca393c5.css",
+    "main.js": "/Vate/static/js/main.843eee0b.js",
+    "index.html": "/Vate/index.html",
+    "main.7ca393c5.css.map": "/Vate/static/css/main.7ca393c5.css.map",
+    "main.843eee0b.js.map": "/Vate/static/js/main.843eee0b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7ca393c5.css",
+    "static/js/main.843eee0b.js"
+  ]
+}

@@ -1,0 +1,108 @@
+body {
+    font-family: 'Noto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.template-container {
+    width: 80%;
+    margin: 20px auto;
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+header .intro {
+    font-size: 16px;
+    color: #666;
+}
+
+.concepts {
+    margin: 20px 0;
+}
+
+.concept-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.toggle-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    background: #f1f1f1;
+    border: none;
+    width: 100%;
+    padding: 10px 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background-color: #eaeaea;
+}
+
+.arrow {
+    font-size: 16px;
+    color: #666;
+}
+
+.toggle-content {
+    display: none;
+    padding: 10px 15px;
+    background: #f9f9f9;
+    font-size: 16px;
+    border-top: 1px solid #ddd;
+}
+
+.notes .info {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.workflow h2,
+.related-topics h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.workflow-diagram {
+    text-align: center;
+    padding: 20px;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    background: #f4f4f4;
+}
+
+.related-topics .topics {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.related-topics .topic {
+    font-size: 16px;
+    padding: 10px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+}
