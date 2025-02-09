@@ -30,15 +30,10 @@ const OverviewTopics = () => {
 
     useEffect(() => {
         fetch(`${process.env.PUBLIC_URL}/templates/tech-docs/overview-topics/template.json`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Failed to fetch template");
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 console.log("Loaded Template:", data);
-                setTemplateData(data); // Update state with template data
+                setTemplateData(data); // eslint-disable-line no-unused-vars
             })
             .catch(error => console.error("Error loading template:", error));
     }, []);
