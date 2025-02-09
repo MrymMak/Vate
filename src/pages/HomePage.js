@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Menu, Dropdown, Input, Button, Row, Col, Card } from "antd";
-import { FilterOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
+import { FilterOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 const { Sider, Content } = Layout;
