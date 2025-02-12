@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./temp-docs-overview-css-1.css";
+import "../styles/temp-docs-overview-css-1.css";
 
 const TempDocsOverviewIndex1 = () => {
     useEffect(() => {
