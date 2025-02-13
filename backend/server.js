@@ -42,6 +42,7 @@ app.use((req, res, next) => {
     next();
 });
 
+// Set up build path
 const buildPath = path.join(__dirname, "../build");
 
 // Serve React static files
