@@ -47,9 +47,6 @@ const buildPath = path.join(__dirname, "../build");
 // Serve React static files
 app.use(express.static(buildPath));
 
-// 🚀 Ensure templates are explicitly served
-app.use("/templates", express.static(path.join(__dirname, "../build/templates")));
-
 // Handle React Router fallback
 app.get("*", (req, res) => {
     res.sendFile(path.join(buildPath, "index.html"));

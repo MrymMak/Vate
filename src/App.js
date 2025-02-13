@@ -21,8 +21,7 @@ const App = () => {
                 <Route path="/" element={<LoginSignupPage />} />
 
                 {/* Template Route */}
-                <Route path="/templates/tech-docs/overview-topics/template1" element={<TempDocsOverviewIndex1 />} />
-
+                <Route path="/temp-docs-overview-index-1" element={<TempDocsOverviewIndex1 />} />
                 {/* Main Pages */}
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/docs" element={<Docs />} />
