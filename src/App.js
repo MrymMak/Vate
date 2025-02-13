@@ -7,7 +7,7 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import TechnicalDocs from "./pages/TechnicalDocs";
 import OverviewTopics from "./pages/OverviewTopics";
-import TempDocsOverviewIndex1 from "./pages/temp-docs-overview-index-1";
+import TempDocsOverviewIndex1 from "./pages/TempDocsOverviewIndex1";
 
 
 // Placeholder components for missing pages
@@ -21,7 +21,8 @@ const App = () => {
                 <Route path="/" element={<LoginSignupPage />} />
 
                 {/* Template Route */}
-                <Route path="/temp-docs-overview-index-1" element={<TempDocsOverviewIndex1 />} />
+                <Route path="/TempDocsOverviewIndex1" element={<TempDocsOverviewIndex1 />} />
+
                 {/* Main Pages */}
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/docs" element={<Docs />} />

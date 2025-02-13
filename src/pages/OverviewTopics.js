@@ -3,7 +3,7 @@ import { Layout, Menu, Input, Button, Row, Col, Card, Tag } from "antd";
 import { FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import Axios
-import TempDocsOverviewIndex1 from './pages/temp-docs-overview-index-1';
+import TempDocsOverviewIndex1 from "./TempDocsOverviewIndex1";
 
 /* pauvre line */
 
