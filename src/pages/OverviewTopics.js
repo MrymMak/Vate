@@ -269,7 +269,7 @@ const OverviewTopics = () => {
                             <h3 style={{ color: "#484848" }}>{expandedTemplate}</h3>
 
                             {/* Load Template Dynamically */}
-                            {expandedTemplate === "Template 1" && <TempDocsOverviewIndex1 />}
+                            {expandedTemplate === "Template 1" && <TempDocsOverviewIndex1 key={expandedTemplate} />}
                             {/* Add more conditions for other templates if necessary */}
                             {/* You can add more dynamic checks if you have other templates */}
 

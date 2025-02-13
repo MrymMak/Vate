@@ -62,7 +62,7 @@ header .intro {
 }
 
 .toggle-content {
-    display: none;
+    display: block !important;
     padding: 10px 15px;
     background: #f9f9f9;
     font-size: 16px;
