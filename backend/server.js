@@ -14,7 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Load API Keys
-const API_KEY = process.env.API_KEY || process.env.RENDER_API_KEY;
+const API_KEY = process.env.RENDER_API_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 // CORS options
@@ -40,17 +40,6 @@ app.use((req, res, next) => {
         return res.status(403).json({ message: "Forbidden: Invalid API Key" });
     }
     next();
-});
-
-// Set up build path
-const buildPath = path.join(__dirname, "../build");
-
-// Serve React static files
-app.use(express.static(buildPath));
-
-// Handle React Router fallback
-app.get("*", (req, res) => {
-    res.sendFile(path.join(buildPath, "index.html"));
 });
 
 // API Routes
