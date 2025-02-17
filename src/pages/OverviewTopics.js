@@ -218,10 +218,11 @@ const OverviewTopics = () => {
                                 onClick={async () => {
                                     if (isUploadEnabled) {
                                         try {
-                                            const API_KEY = ""; // Don't set API keys directly in frontend
+                                            const API_KEY = process.env.REACT_APP_RENDER_API_KEY; // Now frontend can access it
 
                                             console.log("Sending request to create session...");
                                             console.log("Loaded API Key:", process.env.RENDER_API_KEY);
+                                            console.log("Using API Key:", API_KEY);
 
                                             const response = await axios.post(
                                                 "https://vate.onrender.com/api/session",
