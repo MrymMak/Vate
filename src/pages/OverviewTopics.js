@@ -32,7 +32,6 @@ const OverviewTopics = () => {
 
     const handleSelectTemplate = (template) => {
         if (selectedTemplate === template) {
-            // Deselect
             setSelectedTemplate(null);
             setIsUploadEnabled(false);
         } else {
@@ -201,62 +200,24 @@ const OverviewTopics = () => {
                                         }}
                                         onClick={() => handleExpand(template)}
                                     >
-                                        {selectedTemplate === template && (
-                                            <Tag
-                                                color="green"
-                                                style={{
-                                                    position: "absolute",
-                                                    top: "10px",
-                                                    left: "10px",
-                                                }}
-                                            >
-                                                Selected
-                                            </Tag>
-                                        )}
                                         {template}
-                                        <div
-                                            style={{
-                                                position: "absolute",
-                                                top: "10px",
-                                                right: "10px",
-                                                cursor: "pointer",
-                                                fontSize: "1.2rem",
-                                            }}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleSelectTemplate(template);
-                                            }}
-                                        >
-                                            {selectedTemplate === template ? "✓" : "○"}
-                                        </div>
                                     </Card>
                                 </Col>
                             ))}
                         </Row>
-
-                        {/* Footer */}
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                marginTop: "30px",
-                            }}
-                        >
-                            <Button
-                                type="primary"
-                                size="large"
-                                disabled={!isUploadEnabled}
-                                onClick={handleContinueToVateGPT}
-                            >
-                                Continue to VateGPT
-                            </Button>
-                        </div>
                     </div>
 
                     {/* Right Section: Template Preview */}
                     {expandedTemplate && (
-                        <div style={{ flex: 1, padding: "20px", backgroundColor: "#f8f8f8" }}>
+                        <div style={{ flex: 1, padding: "20px", backgroundColor: "#f8f8f8", borderLeft: "2px solid #ccc" }}>
                             <TempDocsOverviewIndex1 />
+                            <Button
+                                type="primary"
+                                style={{ display: "block", margin: "10px auto" }}
+                                onClick={() => handleSelectTemplate(expandedTemplate)}
+                            >
+                                {selectedTemplate === expandedTemplate ? "Deselect Template" : "Select This Template"}
+                            </Button>
                             <Button type="default" onClick={handleMinimize} style={{ marginTop: "10px" }}>
                                 Minimize
                             </Button>
@@ -264,6 +225,25 @@ const OverviewTopics = () => {
                     )}
                 </Content>
             </Layout>
+
+            {/* Footer */}
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "30px",
+                    paddingBottom: "20px",
+                }}
+            >
+                <Button
+                    type="primary"
+                    size="large"
+                    disabled={!isUploadEnabled}
+                    onClick={handleContinueToVateGPT}
+                >
+                    Continue to VateGPT
+                </Button>
+            </div>
         </Layout>
     );
 };
