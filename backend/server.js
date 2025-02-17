@@ -17,6 +17,7 @@ const PORT = process.env.PORT || 5000;
 const API_KEY = process.env.RENDER_API_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
+console.log(`Loaded API Key (hidden in production): ${process.env.NODE_ENV !== "production" ? API_KEY : "HIDDEN"}`);
 // CORS options
 const corsOptions = {
     origin: "*",
@@ -35,13 +36,14 @@ app.use((req, res, next) => {
         return next(); // Skip API key check in local development
     }
 
-    const providedKey = req.headers["x-api-key"];
-    if (!providedKey || providedKey.trim() !== API_KEY?.trim()) {
+    console.log("Received API Key:", req.headers["x-api-key"]);
+    console.log("Expected API Key (from env):", process.env.RENDER_API_KEY);
+
+    if (!req.headers["x-api-key"] || req.headers["x-api-key"].trim() !== API_KEY?.trim()) {
         return res.status(403).json({ message: "Forbidden: Invalid API Key" });
     }
     next();
 });
-
 // API Routes
 app.post("/api/session", createSession);
 app.get("/api/session/:id", getSessionById);
@@ -54,7 +56,7 @@ app.get("/proxy/session/:id", async (req, res) => {
 
         const response = await fetch(`https://vate.onrender.com/api/session/${id}`, {
             headers: {
-                "x-api-key": API_KEY,
+                "x-api-key": process.env.RENDER_API_KEY,
                 "Authorization": `Bearer ${OPENAI_API_KEY}`,
             },
         });
