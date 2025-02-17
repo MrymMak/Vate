@@ -1,5 +1,4 @@
 const express = require("express");
-const path = require("path");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const fetch = require("node-fetch");
@@ -32,8 +31,8 @@ app.use(express.json());
 const isLocal = process.env.NODE_ENV !== "production";
 
 app.use((req, res, next) => {
-    if (isLocal || req.path === "/") {
-        return next(); // Allow all requests in local mode or on root route
+    if (isLocal || req.path === "/" || req.path === "/favicon.ico") {
+        return next(); // Allow requests to root and favicon
     }
 
     console.log("Received API Key:", req.headers["x-api-key"]);
@@ -73,7 +72,7 @@ app.get("/proxy/session/:id", async (req, res) => {
 });
 
 // Root Route for Health Check
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
     res.send("Vate Backend is Running!");
 });
 
