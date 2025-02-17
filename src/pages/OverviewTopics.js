@@ -5,14 +5,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import Axios
 import TempDocsOverviewIndex1 from "./TempDocsOverviewIndex1";
 
-/* pauvre line */
-
 const { Sider, Content } = Layout;
 
 const OverviewTopics = () => {
     const navigate = useNavigate();
     const [expandedTemplate, setExpandedTemplate] = useState(null);
-    const [selectedTemplates, setSelectedTemplates] = useState([]);
+    const [selectedTemplate, setSelectedTemplate] = useState(null); // Track single selection
     const [isUploadEnabled, setIsUploadEnabled] = useState(false);
 
     const templates = [
@@ -32,25 +30,53 @@ const OverviewTopics = () => {
         setExpandedTemplate(template);
     };
 
-    const handleSelectTemplate = () => {
-        let updatedTemplates;
-
-        if (selectedTemplates.includes(expandedTemplate)) {
-            // Remove the template
-            updatedTemplates = selectedTemplates.filter((template) => template !== expandedTemplate);
+    const handleSelectTemplate = (template) => {
+        if (selectedTemplate === template) {
+            // Deselect
+            setSelectedTemplate(null);
+            setIsUploadEnabled(false);
         } else {
-            // Add the template
-            updatedTemplates = [...selectedTemplates, expandedTemplate];
+            setSelectedTemplate(template);
+            setIsUploadEnabled(true);
         }
-
-        setSelectedTemplates(updatedTemplates);
-        setIsUploadEnabled(updatedTemplates.length > 0); // Disable button if no templates are selected
     };
 
     const handleMinimize = () => {
         setExpandedTemplate(null);
     };
 
+    const handleContinueToVateGPT = async () => {
+        if (!isUploadEnabled || !selectedTemplate) return;
+
+        try {
+            const API_KEY = process.env.REACT_APP_RENDER_API_KEY;
+
+            console.log("Sending request to create session...");
+            console.log("REACT_APP_RENDER_API_KEY:", API_KEY);
+
+            const response = await axios.post(
+                "https://vate.onrender.com/api/session",
+                { selectedTemplate },
+                { headers: { "x-api-key": API_KEY } }
+            );
+
+            console.log("API Response:", response.data);
+
+            if (response.status === 201 || response.status === 200) {
+                const sessionId = response.data.sessionId;
+                console.log("Session Created:", sessionId);
+
+                const vateGPTUrl = `https://chat.openai.com/g/g-67607db379148191bb6a5d90511fe882-vategpt?session=${sessionId}`;
+                window.open(vateGPTUrl, "_blank");
+            } else {
+                console.error("Unexpected response:", response.status);
+                alert(`Error: Unexpected response (${response.status}).`);
+            }
+        } catch (error) {
+            console.error("Error in API call:", error.response ? error.response.data : error.message);
+            alert("Error: Could not create session. Check console for details.");
+        }
+    };
 
     return (
         <Layout style={{ minHeight: "100vh", fontFamily: "Poppins, sans-serif" }}>
@@ -79,6 +105,7 @@ const OverviewTopics = () => {
                     </Menu.Item>
                 </Menu>
             </Sider>
+
             {/* Main Content */}
             <Layout>
                 {/* Header */}
@@ -174,7 +201,7 @@ const OverviewTopics = () => {
                                         }}
                                         onClick={() => handleExpand(template)}
                                     >
-                                        {selectedTemplates.includes(template) && (
+                                        {selectedTemplate === template && (
                                             <Tag
                                                 color="green"
                                                 style={{
@@ -195,8 +222,12 @@ const OverviewTopics = () => {
                                                 cursor: "pointer",
                                                 fontSize: "1.2rem",
                                             }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleSelectTemplate(template);
+                                            }}
                                         >
-                                            ↗
+                                            {selectedTemplate === template ? "✓" : "○"}
                                         </div>
                                     </Card>
                                 </Col>
@@ -215,87 +246,18 @@ const OverviewTopics = () => {
                                 type="primary"
                                 size="large"
                                 disabled={!isUploadEnabled}
-                                onClick={async () => {
-                                    if (isUploadEnabled) {
-                                        try {
-                                            const API_KEY = process.env.REACT_APP_RENDER_API_KEY; // Now frontend can access it
-
-                                            console.log("Checking Environment Variables...");
-                                            console.log("REACT_APP_RENDER_API_KEY:", process.env.REACT_APP_RENDER_API_KEY);
-                                            console.log("Full process.env:", process.env);
-
-                                            const response = await axios.post(
-                                                "https://vate.onrender.com/api/session",
-                                                { selectedTemplate: selectedTemplates[0] },
-                                                { headers: { "x-api-key": API_KEY } }
-                                            );
-                                            console.log("API Response:", response);
-
-                                            if (response.status === 201 || response.status === 200) {  // Handle both 201 and 200
-                                                const sessionId = response.data.sessionId;
-                                                console.log("Session created successfully:", sessionId);
-
-                                                //  Redirect to VateGPT with session ID
-                                                const vateGPTUrl = `https://chatgpt.com/g/g-67607db379148191bb6a5d90511fe882-vategpt?session=${sessionId}`;
-                                                window.open(vateGPTUrl, "_blank");
-                                            } else {
-                                                console.error("Unexpected response:", response.status);
-                                                alert(`Error: Unexpected response (${response.status}).`);
-                                            }
-                                        } catch (error) {
-                                            console.error("Error in API call:", error.response ? error.response.data : error.message);
-                                            alert("Error: Could not create session. Check console for details.");
-                                        }
-                                    }
-                                }}
+                                onClick={handleContinueToVateGPT}
                             >
                                 Continue to VateGPT
                             </Button>
                         </div>
                     </div>
 
-
-                    {/* Right Section: Expanded Template */}
+                    {/* Right Section: Template Preview */}
                     {expandedTemplate && (
-                        <div
-                            style={{
-                                flex: 1,
-                                backgroundColor: "#F9F9F9",
-                                padding: "20px",
-                                borderLeft: "1px solid #DFDFDF",
-                                position: "relative",
-                                transition: "flex 0.3s ease",
-                            }}
-                        >
-                            <h3 style={{ color: "#484848" }}>{expandedTemplate}</h3>
-
-                            {/* Load Template Dynamically */}
-                            {expandedTemplate === "Template 1" && <TempDocsOverviewIndex1 key={expandedTemplate} />}
-                            {/* Add more conditions for other templates if necessary */}
-                            {/* You can add more dynamic checks if you have other templates */}
-
-                            <Button
-                                type="primary"
-                                style={{
-                                    marginTop: "10px",
-                                    backgroundColor: selectedTemplates.includes(expandedTemplate) ? "#D9534F" : "#305E3C",
-                                    borderColor: selectedTemplates.includes(expandedTemplate) ? "#D9534F" : "#305E3C",
-                                }}
-                                onClick={handleSelectTemplate}
-                            >
-                                {selectedTemplates.includes(expandedTemplate) ? "Unselect this template" : "Select this template"}
-                            </Button>
-
-                            <Button
-                                style={{
-                                    position: "absolute",
-                                    top: "10px",
-                                    right: "10px",
-                                    cursor: "pointer",
-                                    backgroundColor: "#DFDFDF",
-                                }}
-                                onClick={handleMinimize}
-                            >
+                        <div style={{ flex: 1, padding: "20px", backgroundColor: "#f8f8f8" }}>
+                            <TempDocsOverviewIndex1 />
+                            <Button type="default" onClick={handleMinimize} style={{ marginTop: "10px" }}>
                                 Minimize
                             </Button>
                         </div>
@@ -303,9 +265,7 @@ const OverviewTopics = () => {
                 </Content>
             </Layout>
         </Layout>
-
     );
-
 };
 
 export default OverviewTopics;
