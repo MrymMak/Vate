@@ -222,7 +222,7 @@ const OverviewTopics = () => {
 
                                             console.log("Sending request to create session...");
                                             console.log("Loaded API Key:", process.env.RENDER_API_KEY);
-                                            console.log("Using API Key:", API_KEY);
+                                            console.log("Using API Key:", process.env.REACT_APP_RENDER_API_KEY);
 
                                             const response = await axios.post(
                                                 "https://vate.onrender.com/api/session",
