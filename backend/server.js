@@ -32,8 +32,8 @@ app.use(express.json());
 const isLocal = process.env.NODE_ENV !== "production";
 
 app.use((req, res, next) => {
-    if (isLocal) {
-        return next(); // Skip API key check in local development
+    if (isLocal || req.path === "/") {
+        return next(); // Allow all requests in local mode or on root route
     }
 
     console.log("Received API Key:", req.headers["x-api-key"]);
