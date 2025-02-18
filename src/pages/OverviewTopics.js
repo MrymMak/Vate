@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Layout, Menu, Input, Button, Row, Col, Card, Tag } from "antd";
+import { Layout, Menu, Input, Button, Row, Col, Card } from "antd";
 import { FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 import TempDocsOverviewIndex1 from "./TempDocsOverviewIndex1";
 
 const { Sider, Content } = Layout;
@@ -10,7 +10,7 @@ const { Sider, Content } = Layout;
 const OverviewTopics = () => {
     const navigate = useNavigate();
     const [expandedTemplate, setExpandedTemplate] = useState(null);
-    const [selectedTemplate, setSelectedTemplate] = useState(null); // Track single selection
+    const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [isUploadEnabled, setIsUploadEnabled] = useState(false);
 
     const templates = [
@@ -205,6 +205,24 @@ const OverviewTopics = () => {
                                 </Col>
                             ))}
                         </Row>
+
+                        {/* Keep "Continue to VateGPT" button under the templates */}
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                marginTop: "30px",
+                            }}
+                        >
+                            <Button
+                                type="primary"
+                                size="large"
+                                disabled={!isUploadEnabled}
+                                onClick={handleContinueToVateGPT}
+                            >
+                                Continue to VateGPT
+                            </Button>
+                        </div>
                     </div>
 
                     {/* Right Section: Template Preview */}
@@ -225,25 +243,6 @@ const OverviewTopics = () => {
                     )}
                 </Content>
             </Layout>
-
-            {/* Footer */}
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "30px",
-                    paddingBottom: "20px",
-                }}
-            >
-                <Button
-                    type="primary"
-                    size="large"
-                    disabled={!isUploadEnabled}
-                    onClick={handleContinueToVateGPT}
-                >
-                    Continue to VateGPT
-                </Button>
-            </div>
         </Layout>
     );
 };
