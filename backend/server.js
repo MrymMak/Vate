@@ -54,9 +54,8 @@ app.get("/proxy/session/:id", async (req, res) => {
 
         const response = await fetch(`https://vate.onrender.com/api/session/${id}`, {
             headers: {
-                "x-api-key": process.env.RENDER_API_KEY,
-                "Authorization": `Bearer ${OPENAI_API_KEY}`,
-            },
+                "x-api-key": process.env.RENDER_API_KEY
+            }
         });
 
         if (!response.ok) {
