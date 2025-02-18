@@ -3,6 +3,7 @@ import { Layout, Menu, Input, Button, Row, Col, Card } from "antd";
 import { FilterOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useEffect } from "react";
 import TempDocsOverviewIndex1 from "./TempDocsOverviewIndex1";
 
 const { Sider, Content } = Layout;
@@ -76,6 +77,27 @@ const OverviewTopics = () => {
             alert("Error: Could not create session. Check console for details.");
         }
     };
+    const [sessionData, setSessionData] = useState(null);
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get("session");
+
+        if (sessionId) {
+            console.log("Fetching session data for ID:", sessionId);
+
+            axios.get(`https://vate.onrender.com/api/session/${sessionId}`, {
+                headers: { "x-api-key": process.env.REACT_APP_RENDER_API_KEY }
+            })
+                .then(response => {
+                    console.log("Session Data:", response.data);
+                    setSessionData(response.data); // ✅ Store in state
+                })
+                .catch(error => {
+                    console.error("Failed to fetch session:", error);
+                });
+        }
+    }, []);
 
     return (
         <Layout style={{ minHeight: "100vh", fontFamily: "Poppins, sans-serif" }}>
