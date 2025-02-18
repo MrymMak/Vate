@@ -16,8 +16,7 @@ const PORT = process.env.PORT || 5000;
 const API_KEY = process.env.RENDER_API_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-console.log(`Loaded API Key (hidden in production): ${process.env.NODE_ENV !== "production" ? API_KEY : "HIDDEN"}`);
-// CORS options
+console.log("Loaded API Key (hidden in production):", process.env.RENDER_API_KEY ? "SET" : "NOT SET");// CORS options
 const corsOptions = {
     origin: "*",
     methods: "GET, POST",
