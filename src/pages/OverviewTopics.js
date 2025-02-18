@@ -86,7 +86,7 @@ const OverviewTopics = () => {
         if (sessionId) {
             console.log("Fetching session data for ID:", sessionId);
 
-            axios.get(`https://vate.onrender.com/api/session/${sessionId}`, {
+            axios.get(`https://vate.onrender.com/proxy/session/${sessionId}`, {
                 headers: { "x-api-key": process.env.REACT_APP_RENDER_API_KEY }
             })
                 .then(response => {
