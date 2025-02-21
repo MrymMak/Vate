@@ -1,11 +1,8 @@
 name = "vate"
-type = "javascript"
+main = "./build/index.html"  # Entry point for React static site
+compatibility_date = "2024-02-21"
 
 [build]
 command = "npm run build"
 cwd = "."
-watch_dir = "src"
-upload_dir = "build"
-
-[build.upload]
-main = "./build/index.html"  # For React apps hosted as static sites
+upload_dir = "./build"
