@@ -13,6 +13,7 @@ backend/temp-storage/
 .env.local
 .env.development
 .env.production
+.dev.env
 
 # IDE/Editor
 .vscode/
