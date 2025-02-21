@@ -1,0 +1,11 @@
+name = "vate"
+type = "javascript"
+
+[build]
+command = "npm run build"
+cwd = "."
+watch_dir = "src"
+upload_dir = "build"
+
+[build.upload]
+main = "./build/index.html"  # For React apps hosted as static sites
