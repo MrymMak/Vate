@@ -49,7 +49,7 @@ const OverviewTopics = () => {
         if (!isUploadEnabled || !selectedTemplate) return;
 
         try {
-            const API_KEY = env.REACT_APP_RENDER_API_KEY;
+            const API_KEY = process.env.REACT_APP_RENDER_API_KEY;
 
             console.log("Sending request to create session...");
             console.log("REACT_APP_RENDER_API_KEY:", API_KEY);
@@ -87,7 +87,7 @@ const OverviewTopics = () => {
             console.log("Fetching session data for ID:", sessionId);
 
             axios.get(`https://vate-proxy.vategpt.workers.dev/session/${sessionId}`, {
-                headers: { "x-api-key": env.REACT_APP_CLOUDFLARE_API_KEY }
+                headers: { "x-api-key": process.env.REACT_APP_CLOUDFLARE_API_KEY }
             })
                 .then(response => {
                     console.log("Session Data:", response.data);
